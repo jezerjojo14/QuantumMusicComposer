@@ -6,7 +6,7 @@ from qiskit.quantum_info.operators import Operator
 from math import *
 import numpy as np
 
-notes=["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"]
+notes=["C4", "D4", "E4", "F4", "G4", "A5", "B5", "C5"]
 
 def generate_rhythm(a=0.5, b=0.5, c=0.5, d=0.5, weight=4):
     qc=QuantumCircuit(4)
@@ -31,7 +31,7 @@ def generate_melody(length, matrix):
     i=0
 
     while len(rhythm)<length:
-        rhythm+=[t+4*i for t in generate_rhythm(weight=7)]
+        rhythm+=[t+4*i for t in generate_rhythm(a=0.5, b=0.5, c=0.3, d=0.3, weight=7)]
         i+=1
 
     rhythm=rhythm[:length]
@@ -73,8 +73,6 @@ def generate_melody(length, matrix):
     return melody_data
 
 
-
-
 def operator_matrix(transition_matrix):
     note_array = lambda x : np.array([0 for _ in range(x)]+[1]+[0 for _ in range(7-x)])
     phi = lambda x : np.kron(note_array(x), sum([sqrt(transition_matrix[x,y])*note_array(y) for y in range(8)]))
@@ -84,12 +82,14 @@ def operator_matrix(transition_matrix):
     W = np.matmul(r2, r1)
     return W
 
+
 def generate_composition(mood="happy"):
 
     # # Ode to Joy
     # data={"C4": [8,9], "D4": [7,10,13,14], "E4": [0, 1, 6, 11, 12], "F4": [2,5], "G4": [3,4]}
 
     data=generate_melody(60, operator_matrix((1/8.0)*np.ones((8,8))))
+    # data=generate_melody(60, operator_matrix(np.eye(8)))
     print(data)
 
     max=0
