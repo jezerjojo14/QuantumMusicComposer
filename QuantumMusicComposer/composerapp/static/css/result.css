@@ -1,0 +1,63 @@
+.flex-container {
+  display: flex;
+  flex-flow: row;
+}
+
+.white {
+  stroke: #888888;
+  fill: #ffffff;
+}
+
+.black {
+  stroke:#000000;
+  fill: #000000;
+}
+
+path {
+  stroke: white;
+  fill: white;
+}
+
+.drumpad-container {
+  flex-grow: 3;
+  display: flex;
+  flex-flow: column;
+}
+
+.drum {
+  margin: 5px;
+  border: solid 1px;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.keyboard-container {
+  margin: auto;
+  width: 70%;
+
+}
+
+.loading-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* width: 50%; */
+  text-align: center;
+  background-color: white;
+  border-radius: 5px;
+  padding: 20px;
+  z-index: 2
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 1;
+  background-color: #00000099
+}
