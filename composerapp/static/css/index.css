@@ -17,6 +17,9 @@ body {
   h4:hover {
     animation: shake 0.8s;
   }
+  p:hover{
+    animation: shake 0.5s;
+  }
   
   @keyframes shake {
     0% {
@@ -37,6 +40,12 @@ body {
     padding-top: 10px;
     padding-right: 10px;
     text-align: end;
+    color: white;
+    font-size: 40px;
+  }
+
+  p{
+    text-align: center;
     color: white;
     font-size: 40px;
   }
