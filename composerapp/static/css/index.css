@@ -1,11 +1,24 @@
 body {
-    background-color: black;
+    background-color: #111;
+    margin: 0
   }
+.overlay {
+  position: absolute;
+  /* z-index: -1; */
+  top: -2px;
+  left: 0;
+  width: 100%;
+  height: 506px;
+  background-color: #000000aa
+}
   h3 {
     padding-top: 80px;
     text-align: center;
     color: white;
     font-size: 100px;
+    font-family: "VT323", sans-serif;
+    position: relative;
+    z-index: 0
   }
   h4 {
     text-align: center;
@@ -13,11 +26,11 @@ body {
     font-size: 30px;
     margin-top: -16px;
   }
-  
+
   h4:hover {
     animation: shake 0.8s;
   }
-  
+
   @keyframes shake {
     0% {
       transform: translateX(0);
@@ -25,7 +38,7 @@ body {
     25% {
       transform: translateX(25px);
     }
-  
+
     50% {
       transform: translateX(-25px);
     }
@@ -38,7 +51,11 @@ body {
     padding-right: 10px;
     text-align: end;
     color: white;
+    font-family: "Poppins", sans-serif;
     font-size: 40px;
+    position: relative;
+    z-index: 0;
+    opacity: 0.6
   }
   .introcontainer {
     height: 500px;
@@ -47,9 +64,11 @@ body {
     background-position: center;
     background-size: cover;
     border: 2px solid transparent;
+    background-attachment: fixed;
   }
   .maincontainer {
     display: flex;
+    flex-wrap: wrap;
   }
   .container {
     /* border: 2px solid white; */
@@ -59,7 +78,7 @@ body {
     margin: 20px;
     margin-top: 60px;
   }
-  
+
   #container1 {
     background-image: url("happy.jpeg");
     background-repeat: no-repeat;
@@ -103,10 +122,9 @@ body {
     background-position: center;
     background-size: cover;
     padding-top: 100px;
-  
+
     width: 80%;
     border-radius: 10px;
     margin: auto;
     margin-top: 70px;
   }
-  

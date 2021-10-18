@@ -5,10 +5,74 @@ from qiskit.providers.ibmq import least_busy
 from qiskit.quantum_info.operators import Operator
 from math import *
 import numpy as np
+from qiskit.circuit import quantumcircuit
+from qiskit.providers.aer import QasmSimulator
 
 notes=["C4", "C#4", "D4", "Eb4", "E4", "F4", "F#4", "G4", "G#4", "A5", "Bb5", "B5", "C5"]
 major_steps=[0,2,2,1,2,2,2,1]
 minor_steps=[0,2,1,2,2,2,2,1]
+mel_minor_steps=[0,2,1,2,2,1,3,1]
+
+chord_progressions={
+    "happy": [
+        {"progression": ["C","G","Am","F"], "scale": "CM"},
+        {"progression": ["Am","G","D","D"], "scale": "Am"},
+        {"progression": ["G","C","D","A"], "scale": "GM"},
+        {"progression": ["A","D","E","E"], "scale": "AM"}
+    ],
+    "emotional": [
+        {"progression": ["Am","G","F","G"], "scale": "Am"},
+        {"progression": ["Am","F","C","G"], "scale": "CM"},
+    ],
+    "hopeful": [
+        {"progression": ["C","D","Em","G"], "scale": "GM"},
+        {"progression": ["A","B","C#m","E"], "scale": "EM"},
+        {"progression": ["F","G","Am","C"], "scale": "CM"},
+        {"progression": ["Eb","F","Gm","Bb"], "scale": "BbM"}
+    ],
+    "sad": [
+        {"progression": ["C","Am","F","G"], "scale": "CM"},
+        {"progression": ["C","Am","Dm","G"], "scale": "CM"},
+        # Will add third one later
+    ],
+    "evil": [
+        {"progression": ["Am","Em","F","Dm"], "scale": "Am"},
+        {"progression": ["Am","Em","G","F"], "scale": "Am"},
+    ],
+    "sinister": [
+        {"progression": ["Dm","Am","Em","F"], "scale": "Dm"},
+        # {"progression": ["CSpecial","CSpecial","EbSpecial","EbSpecial"], "scale": "Gs"},
+        {"progression": ["Cm","Cm","Ebm","Ebm"], "scale": "Gs"},
+    ],
+}
+
+
+def getList(dict):
+    return list(dict.keys())
+
+simulator = QasmSimulator()
+
+
+def generate_chords(length, mood):
+
+    progressions = chord_progressions[mood]
+    # print("number of qubits if log2 of",len(progressions),"=", int(log2(len(progressions))))
+    circuit = QuantumCircuit(int(log2(len(progressions))))
+    circuit.h(range(int(log2(len(progressions)))))
+    circuit.measure_all()
+
+    res = []
+
+    for i in range(int(length/16)+int(length%16!=0)):
+        compiled_circuit = transpile(circuit, simulator)
+        job = simulator.run(compiled_circuit, shots=1)
+        result = job.result()
+        counts = result.get_counts(compiled_circuit)
+        res.append(getList(counts)[0])
+
+    return (sum([progressions[int(val,2)]["progression"] for val in res],[]), [progressions[int(val,2)]["scale"] for val in res])
+
+
 
 def st_number(note_number, scale_root, scale_type):
     try:
@@ -18,10 +82,12 @@ def st_number(note_number, scale_root, scale_type):
 
     if scale_type=="M":
         pos+=sum(major_steps[:note_number+1])
-    else:
+    elif scale_type=="m":
         pos+=sum(minor_steps[:note_number+1])
+    else:
+        pos+=sum(mel_minor_steps[:note_number+1])
 
-    print(note_number, pos, pos-12*int(pos>=13))
+    # print(note_number, pos, pos-12*int(pos>=13))
     return pos-12*int(pos>=13)
 
 def generate_rhythm(a=0.5, b=0.5, c=0.5, d=0.5, weight=4):
@@ -51,10 +117,6 @@ def generate_melody(length, matrix, scale_root="C", scale_type="M"):
         i+=1
 
 
-    # rhythm=rhythm[:length]
-
-    # length=int(length/2)
-
     qc=QuantumCircuit(QuantumRegister(3), QuantumRegister(3))
     qc.h(list(range(6)))
     U=Operator(matrix)
@@ -75,17 +137,26 @@ def generate_melody(length, matrix, scale_root="C", scale_type="M"):
     for edge in measurement_edges:
         measurement+=[edge[3:], edge[:3]]
 
-    print(measurement)
+    # print(measurement)
     # print(qc.draw("text"))
 
     melody_data={}
 
     i=0
 
+    print(notes[st_number(0,scale_root,scale_type)], scale_root)
+    print(notes[st_number(1,scale_root,scale_type)], scale_root)
+    print(notes[st_number(2,scale_root,scale_type)], scale_root)
+    print(notes[st_number(3,scale_root,scale_type)], scale_root)
+    print(notes[st_number(4,scale_root,scale_type)], scale_root)
+    print(notes[st_number(5,scale_root,scale_type)], scale_root)
+    print(notes[st_number(6,scale_root,scale_type)], scale_root)
+    print(notes[st_number(7,scale_root,scale_type)], scale_root)
+
     for t in measurement:
         st_num=st_number(int(t,2),scale_root,scale_type)
         if notes[st_num] not in melody_data.keys():
-            melody_data[notes[st_num]]=[]
+            melody_data[notes[st_num]]=[rhythm[i]]
         melody_data[notes[st_num]]+=[rhythm[i]]
         i+=1
 
@@ -102,8 +173,29 @@ def operator_matrix(transition_matrix):
     return W
 
 
+def melody_add(mel1, mel2, l):
+    combined={}
+    for note in mel1.keys():
+        if note in mel2.keys():
+            combined[note]=mel1[note]+[val+l for val in mel2[note]]
+        else:
+            combined[note]=mel1[note]
+    for note in mel2.keys():
+        if note not in mel1.keys():
+            combined[note]=[val+l for val in mel2[note]]
+    return combined
 
 def generate_composition(mood="happy"):
+
+    progressions=generate_chords(128, mood)
+    chords_seq=progressions[0]
+    scales=progressions[1]
+    chords={}
+    for i in range(len(chords_seq)):
+        if chords_seq[i] in chords.keys():
+            chords[chords_seq[i]]+=[4*i]
+        else:
+            chords[chords_seq[i]]=[4*i]
 
     major_matrix=[
     [0.09174311926605505, 0.1834862385321101, 0.1834862385321101, 0.09174311926605505, 0.1834862385321101, 0.11009174311926606, 0.06422018348623854, 0.09174311926605505],
@@ -127,15 +219,17 @@ def generate_composition(mood="happy"):
     [0.16666666666666666, 0.16666666666666666, 0.125, 0.10416666666666667, 0.08333333333333333, 0.14583333333333334, 0.08333333333333333, 0.125]
     ]
 
-    scale_type="M"
 
-    if mood in ["happy", "emotional", "hopeful"]:
-        transition_matrix=major_matrix
-    else:
-        transition_matrix=minor_matrix
-        scale_type="m"
+    transition_matrix=minor_matrix
+    data={}
+    i=0
+    for scale in scales:
+        if scale[-1]=="M":
+            transition_matrix=major_matrix
+        mini_melody=generate_melody(16, operator_matrix(np.array(transition_matrix)), scale[:-1], scale[-1])
+        data=melody_add(data, mini_melody, i*16)
+        i+=1
 
-    data=generate_melody(16, operator_matrix(np.array(transition_matrix)), "C#", scale_type)
     # data=generate_melody(60, operator_matrix(np.eye(8)))
     print(data)
 
@@ -165,4 +259,4 @@ def generate_composition(mood="happy"):
 
 
     # {"solo_parts": {}, "chords": {"C": 0, "G": 4, "Am": 8, "F": 12, "G": 16, }}
-    return {"solo_parts": data, "chords": {}}
+    return {"solo_parts": data, "chords": chords}

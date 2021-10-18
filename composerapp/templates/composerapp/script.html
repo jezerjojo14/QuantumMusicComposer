@@ -21,7 +21,8 @@
   var audioFilesReady = false;
   var data = {};
   let preferences=JSON.parse("{{preferences | escapejs}}");
-  let chordDisplay = document.querySelector(".chord-display");
+  var chordDisplay;
+  let NOTES=["C4", "C#4", "D4", "Eb4", "E4", "F4", "F#4", "G4", "G#4", "A5", "Bb5", "B5"];
 
   function playNote(note, time) {
     // console.log(note);
@@ -35,7 +36,12 @@
       }
       setTimeout(()=>{
         if (note != "kick" && note != "snare" && note != "hihat") {
-          document.getElementById(note).style.fill="#222";
+          if (note.length == 2) {
+            document.getElementById(note).style.fill="#222";
+          }
+          else {
+            document.getElementById(note).style.fill="#ffffff";
+          }
         }
         else {
           document.getElementById(note).style.backgroundColor="#222";
@@ -47,7 +53,31 @@
   function playChord(chord, time) {
     // console.log(note);
     setTimeout(()=>{
-      createjs.Sound.play(chord);
+      var root,type;
+      root=chord;
+      type="M";
+      if (chord.slice(-1)=="m") {
+        root=chord.slice(0,-1)
+        type="m";
+      }
+      let root_pos=NOTES.indexOf(root+"4");
+      if (root_pos==-1) {
+        root_pos=NOTES.indexOf(root+"5");
+      }
+
+      let fifth_pos=root_pos+7;
+      let third_pos=root_pos+4;
+
+      if (type=="m") {
+        third_pos-=1;
+      }
+
+      fifth_pos=fifth_pos%12;
+      third_pos=third_pos%12;
+
+      createjs.Sound.play(NOTES[root_pos]);
+      createjs.Sound.play(NOTES[third_pos]);
+      createjs.Sound.play(NOTES[fifth_pos]);
       chordDisplay.innerHTML=chord;
     }, time+1000);
   }
@@ -119,7 +149,8 @@
 
 
   document.addEventListener("DOMContentLoaded", ()=>{
-    loadSoundFiles()
+    loadSoundFiles();
+    chordDisplay = document.querySelector(".chord-display");
     console.log(preferences);
     let CSRFToken = getCookie("csrftoken");
     fetch("{% url 'generate' %}", {
