@@ -4,3 +4,4 @@ qiskit-aqua==0.9.1
 qiskit-ibmq-provider==0.13.1
 qiskit-ignis==0.6.0
 qiskit-terra==0.17.4
+gunicorn
