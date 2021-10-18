@@ -47,6 +47,87 @@ chord_progressions={
 }
 
 
+def pick_drum_preset():
+
+    qc=QuantumCircuit(4)
+
+    qc.ry(2*acos((1/3)**0.5), 0)
+    qc.ry(pi/4,1)
+    qc.cx(0,1)
+    qc.ry(-pi/4,1)
+
+    qc.ry(2*acos((1/3)**0.5), 2)
+    qc.ry(pi/4,3)
+    qc.cx(2,3)
+    qc.ry(-pi/4,3)
+
+    qc.measure_all()
+
+    simulator = Aer.get_backend('qasm_simulator')
+    result = execute(qc, simulator, shots=1).result()
+    counts = result.get_counts(qc)
+
+    draw=0
+    for val in counts.keys():
+        draw=int(val,2)
+
+    possible_draws=[0,1,3,4,5,7,12,13,15]
+
+    possible_beats=[
+        [
+            [0,1,2,3],
+            [1,3],
+            [0,0.5,1,1.5,2,2.5,3,3.5]
+        ],
+        [
+            [0,1.5,2],
+            [1,3],
+            [0,0.5,1,1.5,2,2.5,3,3.5]
+        ],
+        [
+            [0,0.5,1.5,2],
+            [1,2.5],
+            [0,0.5,1,1.5,2,2.5,3,3.5]
+        ],
+        [
+            [1,2.5],
+            [],
+            [0,0.5,1,1.5,2,2.5,3,3.5]
+        ],
+        [
+            [0,1.5,2.5],
+            [1,3],
+            [0,0.5,1,1.5,2,2.5,3,3.5]
+        ],
+        [
+            [1,1.5,3],
+            [0.5,2.5],
+            [0,0.5,1,1.5,2,2.5,3,3.5]
+        ],
+
+        # Slower Patterns
+
+        [
+            [0],
+            [],
+            [0,1,2,3]
+        ],
+        [
+            [0],
+            [2],
+            [0,1,2,3]
+        ],
+        [
+            [0],
+            [1],
+            [0,1,2,3]
+        ]
+    ]
+
+    beat_no=possible_draws.index(draw)
+    return possible_beats[beat_no]
+
+
 def getList(dict):
     return list(dict.keys())
 
@@ -242,19 +323,28 @@ def generate_composition(mood="happy"):
         for t in data[datum]:
             if t>max:
                 max=t
-    kick_rhythm_element=generate_rhythm(a=0.5, b=0.3, c=0.2, d=0.1)
+
+    if mood=="qjazz":
+        kick_rhythm_element=generate_rhythm(a=0.5, b=0.3, c=0.2, d=0.1)
+        snare_rhythm_element=generate_rhythm(a=0.5, b=0.8, c=0.2, d=0.1)
+        hihat_rhythm_element=generate_rhythm(a=0.5, b=0.6, c=0.5, d=0.5, weight=15)
+    else:
+        drum_preset=pick_drum_preset()
+        kick_rhythm_element=drum_preset[0]
+        snare_rhythm_element=drum_preset[1]
+        hihat_rhythm_element=drum_preset[2]
+
+
     kick_rhythm=[]
     for i in range(int((max/4)+1)):
         kick_rhythm+=[4*i+value for value in kick_rhythm_element]
     data["kick"]=kick_rhythm
 
-    snare_rhythm_element=generate_rhythm(a=0.5, b=0.8, c=0.2, d=0.1)
     snare_rhythm=[]
     for i in range(int((max/4)+1)):
         snare_rhythm+=[4*i+value for value in snare_rhythm_element]
     data["snare"]=snare_rhythm
 
-    hihat_rhythm_element=generate_rhythm(a=0.5, b=0.6, c=0.5, d=0.5, weight=15)
     hihat_rhythm=[]
     for i in range(int((max/4)+1)):
         hihat_rhythm+=[4*i+value for value in hihat_rhythm_element]
