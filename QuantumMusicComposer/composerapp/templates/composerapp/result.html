@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Generated melody</title>
+    <link rel="stylesheet" href="{% static 'css/result.css' %}">
+    <script src="https://code.createjs.com/1.0.0/soundjs.min.js"></script>
+    {% include 'composerapp/script.html' %}
+  </head>
+  <body>
+    <div class="loading-popup">
+      Composing...
+    </div>
+    <div class="overlay">
+    </div>
+    <div class="flex-container">
+      <div class="keyboard-container" data-oct="3">
+        <svg class="keyboard" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 80 60">
+            <rect id="C4" data-note="1" data-oct="3" class="narrowkey key white" x="0" y="5" height="50" width="10"><title>C</title></rect>
+            <rect id="D4" data-note="3" data-oct="3" class="narrowkey key white" x="10" y="5" height="50" width="10"><title>D</title></rect>
+            <rect id="E4" data-note="5" data-oct="3" class="narrowkey key white" x="20" y="5" height="50" width="10"><title>E</title></rect>
+            <rect id="F4" data-note="6" data-oct="3" class="narrowkey key white" x="30" y="5" height="50" width="10"><title>F</title></rect>
+            <rect id="G4" data-note="8" data-oct="3" class="narrowkey key white" x="40" y="5" height="50" width="10"><title>G</title></rect>
+            <rect id="A5" data-note="10" data-oct="3" class="narrowkey key white" x="50" y="5" height="50" width="10"><title>A</title></rect>
+            <rect id="B5" data-note="12" data-oct="3" class="narrowkey key white" x="60" y="5" height="50" width="10"><title>B</title></rect>
+            <rect data-note="2" data-oct="3" class="narrowkey key black" x="7.5" y="5" height="25" width="5"><title>C#</title></rect>
+            <rect data-note="4" data-oct="3" class="narrowkey key black" x="17.5" y="5" height="25" width="5"><title>D#</title></rect>
+            <rect data-note="7" data-oct="3" class="narrowkey key black" x="37.5" y="5" height="25" width="5"><title>F#</title></rect>
+            <rect data-note="9" data-oct="3" class="narrowkey key black" x="47.5" y="5" height="25" width="5"><title>Ab</title></rect>
+            <rect data-note="11" data-oct="3" class="narrowkey key black" x="57.5" y="5" height="25" width="5"><title>Bb</title></rect>
+            <rect id="C5" data-note="1" data-oct="4" class="narrowkey key white" x="70" y="5" height="50" width="10"><title>C</title></rect>
+        </svg>
+      </div>
+      <div class="drumpad-container">
+        <div id="kick" class="drum">
+          Kick
+        </div>
+        <div id="snare" class="drum">
+          Snare
+        </div>
+        <div id="hihat" class="drum">
+          Hi-Hat
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  </body>
+</html>

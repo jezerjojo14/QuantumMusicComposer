@@ -19,5 +19,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name="index"),
+    path('result/<str:mood>/<int:tempo>', views.result, name="result"),
     path('generate', views.generate_composition, name="generate"),
 ]

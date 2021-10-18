@@ -1,0 +1,119 @@
+{% load static %}
+
+<script type="text/javascript">
+
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  var audioFilesReady = false;
+  var data = {}
+  let preferences=JSON.parse("{{preferences | escapejs}}")
+
+  function playNote(note, time) {
+    // console.log(note);
+    setTimeout(()=>{
+      createjs.Sound.play(note);
+      if (note != "kick" && note != "snare" && note != "hihat") {
+        document.getElementById(note).style.fill="#00FFFF";
+      }
+      else {
+        document.getElementById(note).style.backgroundColor="#e2e2e2";
+      }
+      setTimeout(()=>{
+        if (note != "kick" && note != "snare" && note != "hihat") {
+          document.getElementById(note).style.fill="#FFFFFF";
+        }
+        else {
+          document.getElementById(note).style.backgroundColor="#FFFFFF";
+        }
+      }, 50);
+    }, time+1000);
+  }
+
+  function playComposition(d) {
+    document.querySelector(".overlay").style.display="none";
+    document.querySelector(".loading-popup").style.display="none";
+    console.log(d);
+    for (var note in d) {
+      // console.log(note);
+      if (d.hasOwnProperty(note)) {
+        d[note].forEach((item, i) => {
+          // console.log(item);
+          // console.log(60000*item/preferences["tempo"]);
+          console.log(note, item);
+          playNote(note, 60000*item/preferences["tempo"])
+        });
+      }
+    }
+  }
+
+  function loadSoundFiles() {
+    createjs.Sound.registerPlugins([createjs.WebAudioPlugin, createjs.FlashAudioPlugin]);
+    createjs.Sound.alternateExtensions = ["mp3"];
+    createjs.Sound.addEventListener( "fileload", loadHandler, true );
+    var filesloaded = 0;
+    function loadHandler(event) {
+        // This is fired for each sound that is registered.
+        filesloaded+=1;
+        console.log("file loaded");
+        console.log(filesloaded);
+        if (filesloaded == 11) {
+          audioFilesReady=true;
+          if (Object.keys(data).length != 0) {
+            playComposition(data)
+          }
+        }
+    }
+    createjs.Sound.registerSound("{% static 'audio/c4.mp3' %}", "C4");
+    createjs.Sound.registerSound("{% static 'audio/d4.mp3' %}", "D4");
+    createjs.Sound.registerSound("{% static 'audio/e4.mp3' %}", "E4");
+    createjs.Sound.registerSound("{% static 'audio/f4.mp3' %}", "F4");
+    createjs.Sound.registerSound("{% static 'audio/g4.mp3' %}", "G4");
+    createjs.Sound.registerSound("{% static 'audio/a5.mp3' %}", "A5");
+    createjs.Sound.registerSound("{% static 'audio/b5.mp3' %}", "B5");
+    createjs.Sound.registerSound("{% static 'audio/c5.mp3' %}", "C5");
+    createjs.Sound.registerSound("{% static 'audio/kick.wav' %}", "kick");
+    createjs.Sound.registerSound("{% static 'audio/snare.wav' %}", "snare");
+    createjs.Sound.registerSound("{% static 'audio/hihat.wav' %}", "hihat");
+    // createjs.Sound.registerSound("{% static 'https://www.tedxiiserpune.com/media-content/hand_crafted_TEDxIISERPune_custom_notification_sound.wav' %}", "hihat");
+  }
+
+
+  document.addEventListener("DOMContentLoaded", ()=>{
+    loadSoundFiles()
+    console.log(preferences);
+    let CSRFToken = getCookie("csrftoken");
+    fetch("{% url 'generate' %}", {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        "Accept": "application/json",
+        "X-CSRFToken": CSRFToken
+      },
+      body: JSON.stringify(preferences)
+    })
+    .then(response => {
+      return response.json()
+    })
+    .then(d => {
+      data=d;
+      if (audioFilesReady) {
+        playComposition(data)
+      }
+    });
+  });
+</script>
