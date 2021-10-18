@@ -54,8 +54,12 @@ simulator = QasmSimulator()
 
 
 def generate_chords(length, mood):
-
-    progressions = chord_progressions[mood]
+    if mood=="qjazz":
+        progressions=[]
+        for m in chord_progressions.keys():
+            progressions+=chord_progressions[m]
+    else:
+        progressions = chord_progressions[mood]
     # print("number of qubits if log2 of",len(progressions),"=", int(log2(len(progressions))))
     circuit = QuantumCircuit(int(log2(len(progressions))))
     circuit.h(range(int(log2(len(progressions)))))
