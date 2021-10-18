@@ -4,4 +4,7 @@ qiskit-aqua==0.9.1
 qiskit-ibmq-provider==0.13.1
 qiskit-ignis==0.6.0
 qiskit-terra==0.17.4
-gunicorn
+gunicorn==20.0.4
+Django==3.2.6
+django-heroku==0.3.1
+numpy==1.20.1
