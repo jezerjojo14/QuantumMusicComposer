@@ -1,16 +1,34 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #111;
+  color: white;
+}
+
 .flex-container {
   display: flex;
   flex-flow: row;
 }
 
+.left {
+  display: flex;
+  flex-flow: column;
+  margin: auto;
+  width: 70%;
+}
+
 .white {
-  stroke: #888888;
-  fill: #ffffff;
+  stroke:#000000;
+  fill: #222;
 }
 
 .black {
   stroke:#000000;
-  fill: #000000;
+  fill: #ffffff;
+}
+
+.drumpad-container > div {
+  background-color: #222;
+  border-radius: 5px;
 }
 
 path {
@@ -34,9 +52,11 @@ path {
 }
 
 .keyboard-container {
-  margin: auto;
-  width: 70%;
+  width: 90%;
+}
 
+.chord-display {
+  text-align: center;
 }
 
 .loading-popup {

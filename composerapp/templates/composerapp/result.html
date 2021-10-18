@@ -6,6 +6,8 @@
     <meta charset="utf-8">
     <title>Generated melody</title>
     <link rel="stylesheet" href="{% static 'css/result.css' %}">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <script src="https://code.createjs.com/1.0.0/soundjs.min.js"></script>
     {% include 'composerapp/script.html' %}
   </head>
@@ -16,8 +18,12 @@
     <div class="overlay">
     </div>
     <div class="flex-container">
-      <div class="keyboard-container" data-oct="3">
-        <svg class="keyboard" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 80 60">
+      <div class="left">
+        <div class="chord-display-container">
+          <h2 class="chord-display">-</h2>
+        </div>
+        <div class="keyboard-container" data-oct="3">
+          <svg class="keyboard" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 80 60">
             <rect id="C4" data-note="1" data-oct="3" class="narrowkey key white" x="0" y="5" height="50" width="10"><title>C</title></rect>
             <rect id="D4" data-note="3" data-oct="3" class="narrowkey key white" x="10" y="5" height="50" width="10"><title>D</title></rect>
             <rect id="E4" data-note="5" data-oct="3" class="narrowkey key white" x="20" y="5" height="50" width="10"><title>E</title></rect>
@@ -31,7 +37,8 @@
             <rect data-note="9" data-oct="3" class="narrowkey key black" x="47.5" y="5" height="25" width="5"><title>Ab</title></rect>
             <rect data-note="11" data-oct="3" class="narrowkey key black" x="57.5" y="5" height="25" width="5"><title>Bb</title></rect>
             <rect id="C5" data-note="1" data-oct="4" class="narrowkey key white" x="70" y="5" height="50" width="10"><title>C</title></rect>
-        </svg>
+          </svg>
+        </div>
       </div>
       <div class="drumpad-container">
         <div id="kick" class="drum">
