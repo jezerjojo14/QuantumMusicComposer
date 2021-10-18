@@ -21,7 +21,7 @@ chord_progressions={
         {"progression": ["A","D","E","E"], "scale": "AM"}
     ],
     "emotional": [
-        {"progression": ["Am","G","F","G"], "scale": "Am"},
+        {"progression": ["Am","G","F","G"], "scale": "CM"},
         {"progression": ["Am","F","C","G"], "scale": "CM"},
     ],
     "hopeful": [
