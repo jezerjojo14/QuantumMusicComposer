@@ -1,0 +1,81 @@
+body{
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+/* Rectangle 1 */
+.main{
+    margin-top: 4%;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+}
+.Rectangle_one{
+border-radius: 20%;
+width: 300px;
+height: 250px;
+margin: 10px;
+background: #040fac71;}
+
+
+/* Rectangle 7 */
+
+.Rectangle_two{
+    border-radius: 20%;
+width: 300px;
+height: 250px;
+margin: 10px;
+background: #04ac95;
+}
+
+/* Rectangle 6 */
+
+.Rectangle_three{
+    border-radius: 20%;
+width: 300px;
+height: 250px;
+margin: 10px;
+background: #04ac95;
+}
+
+/* Rectangle 5 */
+
+.Rectangle_four{
+    border-radius: 20%;
+width: 300px;
+height: 250px;
+margin: 10px;
+background: #04ac95;
+}
+
+/* Rectangle 4 */
+
+.Rectangle_five{
+    border-radius: 20%;
+width: 300px;
+height: 250px;
+margin: 10px;
+background: #04ac95;
+}
+
+/* Rectangle 3 */
+
+.Rectangle_six{
+    border-radius: 20%;
+width: 300px;
+height: 250px;
+margin: 10px;
+background: #04ac95;
+}
+
+/* Rectangle 2 */
+
+.Rectangle2{
+    border-radius: 20%;
+width: 100%;
+height: 74px;
+
+
+}

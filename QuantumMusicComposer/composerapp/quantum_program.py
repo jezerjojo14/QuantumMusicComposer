@@ -31,7 +31,7 @@ def generate_melody(length, matrix):
     i=0
 
     while len(rhythm)<length:
-        rhythm+=[t+4*i for t in generate_rhythm(a=0.5, b=0.5, c=0.3, d=0.3, weight=7)]
+        rhythm+=[t+4*i for t in generate_rhythm(a=0.4, b=0.3, c=0.2, d=0.2, weight=10)]
         i+=1
 
     rhythm=rhythm[:length]
@@ -87,8 +87,16 @@ def generate_composition(mood="happy"):
 
     # # Ode to Joy
     # data={"C4": [8,9], "D4": [7,10,13,14], "E4": [0, 1, 6, 11, 12], "F4": [2,5], "G4": [3,4]}
-
-    data=generate_melody(60, operator_matrix((1/8.0)*np.ones((8,8))))
+    transition_matrix=[
+    [1.2, 2.3, 1.2, 1.0, 1, 1, 0, 1],
+    [0.8, 0.2, 1.5, 1.0, 1, 1, 0, 1],
+    [1.2, 2.0, 0.5, 1.4, 1, 1, 0, 1],
+    [1.4, 1.5, 1.6, 1.0, 1, 1, 0, 1],
+    [1.8, 0.8, 1.0, 1.4, 1, 1, 2.5, 1],
+    [0.5, 0.6, 1.0, 1.0, 1, 1, 2.5, 1],
+    [0.1, 0.2, 0.2, 0.2, 1, 1, 0.5, 1],
+    [1.0, 0.4, 1.0, 1.0, 1, 1, 2.5, 1]]
+    data=generate_melody(60, operator_matrix((1/8.0)*np.transpose(np.array(transition_matrix))))
     # data=generate_melody(60, operator_matrix(np.eye(8)))
     print(data)
 
@@ -116,5 +124,3 @@ def generate_composition(mood="happy"):
     data["hihat"]=hihat_rhythm
 
     return data
-
-generate_composition()
