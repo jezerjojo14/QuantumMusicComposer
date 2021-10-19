@@ -307,8 +307,8 @@ def generate_composition(mood="happy"):
 
     transition_matrix=minor_matrix
     data={}
-    i=0
-    for scale in scales:
+    i=2
+    for scale in scales[2:]:
         if scale[-1]=="M":
             transition_matrix=major_matrix
         mini_melody=generate_melody(16, operator_matrix(np.array(transition_matrix)), scale[:-1], scale[-1])
@@ -337,17 +337,20 @@ def generate_composition(mood="happy"):
 
     kick_rhythm=[]
     for i in range(int((max/4)+1)):
-        kick_rhythm+=[4*i+value for value in kick_rhythm_element]
+        if i >= 4:
+            kick_rhythm+=[4*i+value for value in kick_rhythm_element]
     data["kick"]=kick_rhythm
 
     snare_rhythm=[]
     for i in range(int((max/4)+1)):
-        snare_rhythm+=[4*i+value for value in snare_rhythm_element]
+        if i >= 4:
+            snare_rhythm+=[4*i+value for value in snare_rhythm_element]
     data["snare"]=snare_rhythm
 
     hihat_rhythm=[]
     for i in range(int((max/4)+1)):
-        hihat_rhythm+=[4*i+value for value in hihat_rhythm_element]
+        if i >= 4:
+            hihat_rhythm+=[4*i+value for value in hihat_rhythm_element]
     data["hihat"]=hihat_rhythm
 
 
