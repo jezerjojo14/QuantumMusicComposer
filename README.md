@@ -20,8 +20,6 @@ In addition to that we have created a random music which possibly use all the ch
 
 Refer our [slides](https://docs.google.com/presentation/d/1z2rtFk_focGKVdHy_KLWUTKf6kvfiR9KQerfooL19MI/edit?usp=sharing) for the details.
 ---
-Refer our video for explaination.
----
 ![image](https://user-images.githubusercontent.com/77186755/137858382-63bceede-0d42-4551-84cf-f63e5e8a0fc2.png)
 
 
